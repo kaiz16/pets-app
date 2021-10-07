@@ -1,19 +1,53 @@
 <template>
   <div id="app">
     <NavBar></NavBar>
-    <img alt="Vue logo" src="./assets/logo.png">
-    <router-view></router-view>
+    <router-view
+      v-bind:pets="pets"
+      v-on:addPet="addPet($event)"
+      v-on:deletePet="deletePet($event)"
+    ></router-view>
   </div>
 </template>
 
 <script>
-import NavBar from './components/Navbar.vue'
+import NavBar from "./components/Navbar.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    NavBar
-  }
-}
+    NavBar,
+  },
+  data() {
+    return {
+      pets: [],
+    };
+  },
+  mounted() {
+    let pets = localStorage.getItem("pets");
+    if (pets) {
+      // Anything that's not string should be parsed before restoring
+      this.pets = JSON.parse(pets);
+    }
+  },
+  watch: {
+    pets: {
+      handler() {
+        // Anything that's not string should be stringified before storing in the localStorage
+        localStorage.setItem("pets", JSON.stringify(this.pets));
+      },
+    },
+  },
+  methods: {
+    addPet(pet) {
+      this.pets.push(pet);
+      this.$router.push({
+        name: "Pets",
+      });
+    },
+    deletePet(index) {
+      this.pets.splice(index, 1);
+    },
+  },
+};
 </script>
 
 <style>

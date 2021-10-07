@@ -1,5 +1,5 @@
 # pets-app
-
+Create about component
 ## Project setup
 ```
 npm install
